@@ -50,14 +50,7 @@ public class View {
         resetButton.setBounds(180, 50, 150, 25);
         frame.add(resetButton);
 
-        addLemonButton = new JButton("Add Lemon");
-        addLemonButton.setBounds(10, 90, 150, 25);
-        frame.add(addLemonButton);
-
-        summaryReportButton = new JButton("Summary Report");
-        summaryReportButton.setBounds(180, 90, 150, 25);
-        frame.add(summaryReportButton);
-
+        
         outputArea = new JTextArea();
         outputArea.setBounds(10, 130, 360, 200);
         outputArea.setEditable(false);
@@ -65,119 +58,7 @@ public class View {
 
         frame.setVisible(true);
 
-        // Event listeners
-        checkButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleCheckButton();
-            }
-        });
-
-        milkButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleMilkButton();
-            }
-        });
-
-        resetButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleResetButton();
-            }
-        });
-
-        addLemonButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleAddLemonButton();
-            }
-        });
-
-        summaryReportButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleSummaryReportButton();
-            }
-        });
-    }
-
-    private void handleCheckButton() {
-        String id = idField.getText();
-        Model cow = controller.getCow(id);
-        if (cow != null) {
-            outputArea.setText("Cow ID: " + cow.getId() + "\n" +
-                    "Age: " + cow.getAgeYears() + " years " + cow.getAgeMonths() + " months\n" +
-                    "Breed: " + cow.getBreed() + "\n" +
-                    "Milk Bottles: " + cow.getMilkBottles() + "\n" +
-                    (cow instanceof WhiteCowModel ? "Sour Milk Bottles: " + ((WhiteCowModel) cow).getSourMilkBottles()
-                            : ""));
-            
-            if (cow.hasBSOD) {
-                outputArea.setText("Cow ID: " + cow.getId() + "\n" +
-                        "Age: " + cow.getAgeYears() + " years " + cow.getAgeMonths() + " months\n" +
-                        "Breed: " + cow.getBreed() + "\n" +
-                        "Milk Bottles: " + cow.getMilkBottles() + "\n" +
-                        (cow instanceof WhiteCowModel
-                                ? "Sour Milk Bottles: " + ((WhiteCowModel) cow).getSourMilkBottles()
-                                : "")
-                        + "\n" +
-                        "*** Alert: Milk Bottles Should be " + cow.getMilkDefect() + "****");
-            }
-            milkButton.setEnabled(!cow.hasBSOD());
-            resetButton.setEnabled(cow.hasBSOD());
-            addLemonButton.setEnabled(cow instanceof WhiteCowModel && !cow.hasBSOD());
-        } else {
-            outputArea.setText("Invalid Cow ID or Cow not found.");
-            milkButton.setEnabled(false);
-            resetButton.setEnabled(false);
-            addLemonButton.setEnabled(false);
-        }
-    }
-
-    private void handleMilkButton() {
-        String id = idField.getText();
-        controller.milkCow(id);
-        handleCheckButton(); // Update cow info after milking
-    }
-
-    private void handleResetButton() {
-        String id = idField.getText();
-        controller.resetCow(id);
-        handleCheckButton(); // Update cow info after reset
-    }
-
-    private void handleAddLemonButton() {
-        String id = idField.getText();
-        controller.addLemonToCow(id);
-        handleCheckButton(); // Update cow info after adding lemon
-    }
-
-    private void handleSummaryReportButton() {
-        if (summaryFrame != null) {
-            summaryFrame.dispose();
-        }
-        summaryFrame = new JFrame("Summary Report");
-        summaryFrame.setSize(400, 400);
-        summaryFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        summaryFrame.setLayout(null);
-
-        summaryOutputArea = new JTextArea();
-        summaryOutputArea.setBounds(10, 10, 360, 300);
-        summaryOutputArea.setEditable(false);
-        summaryOutputArea.setText(controller.getSummaryReport());
-        summaryFrame.add(summaryOutputArea);
-
-        backButton = new JButton("Back");
-        backButton.setBounds(150, 320, 100, 25);
-        summaryFrame.add(backButton);
-
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                summaryFrame.dispose();
-            }
-        });
+        
 
         summaryFrame.setVisible(true);
     }
