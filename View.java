@@ -6,14 +6,12 @@ import java.util.List;
 public class View extends JFrame {
     private Database database;
     private JTextField idField;
-    private JTextArea reportArea;
-    private List<String> acceptedPets;
-    private List<String> rejectedPets;
+    private List<String[]> petRecords; // เก็บข้อมูลสัตว์ที่ถูกตรวจสอบ
+    private JTextArea reportArea; // ช่องแสดงรายงาน
 
     public View(Database database) {
         this.database = database;
-        this.acceptedPets = new ArrayList<>();
-        this.rejectedPets = new ArrayList<>();
+        this.petRecords = new ArrayList<>();
 
         setTitle("Pet Verification System");
         setSize(400, 300);
@@ -21,6 +19,7 @@ public class View extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
+        // ส่วนของการกรอก ID
         JPanel inputPanel = new JPanel(new GridLayout(2, 1));
         idField = new JTextField();
         inputPanel.add(new JLabel("Enter Pet ID:"));
@@ -30,18 +29,14 @@ public class View extends JFrame {
         submitButton.addActionListener(e -> checkID());
 
         JButton reportButton = new JButton("View Report");
-        reportButton.addActionListener(e -> showReport());
+        reportButton.addActionListener(e -> openReportWindow());
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(submitButton);
         buttonPanel.add(reportButton);
 
-        reportArea = new JTextArea();
-        reportArea.setEditable(false);
-
         add(inputPanel, BorderLayout.NORTH);
         add(buttonPanel, BorderLayout.CENTER);
-        add(new JScrollPane(reportArea), BorderLayout.SOUTH);
 
         setVisible(true);
     }
@@ -51,49 +46,84 @@ public class View extends JFrame {
         String[] petData = database.findPetByID(id);
 
         if (petData != null) {
-            String petType = petData[1];
-            String message = "Pet Information:\n" +
-                    "ID: " + petData[0] + "\nType: " + petType + "\nLast Health Check Date: " + petData[2] +
-                    "\nVaccines Received: " + petData[3];
+            JOptionPane.showMessageDialog(this, "Pet Information:\n" +
+                    "ID: " + petData[0] + "\nType: " + petData[1] + "\nLast Health Check Date: " + petData[2] +
+                    "\nVaccines Received: " + petData[3]);
 
-            JOptionPane.showMessageDialog(this, message);
+            petRecords.add(petData); // เพิ่มข้อมูลสัตว์ที่ถูกตรวจสอบ
 
-            switch (petType) {
+            switch (petData[1]) {
                 case "Phoenix":
-                    new PhoenixView(this);
+                    new PhoenixView(this, petRecords);
                     break;
                 case "Dragon":
-                    new DragonView(this);
+                    new DragonView(this, petRecords);
                     break;
                 case "Owl":
-                    new OwlView(this);
+                    new OwlView(this, petRecords);
                     break;
             }
         } else {
-            JOptionPane.showMessageDialog(this, "This pet does not exist. Please enter a new ID.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, " This pet does not exist. Please enter a new ID.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public void addAcceptedPet(String petType) {
-        acceptedPets.add(petType);
+    private void openReportWindow() {
+        // สร้างหน้าต่างแสดงรายงาน
+        JFrame reportFrame = new JFrame("Pet Report");
+        reportFrame.setSize(500, 400);
+        reportFrame.setLocationRelativeTo(null);
+        reportFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        reportFrame.setLayout(new BorderLayout());
+
+        JPanel buttonPanel = new JPanel();
+        JButton phoenixButton = new JButton("View Phoenix");
+        JButton dragonButton = new JButton("View Dragon");
+        JButton owlButton = new JButton("View Owl");
+
+        phoenixButton.addActionListener(e -> showReport("Phoenix"));
+        dragonButton.addActionListener(e -> showReport("Dragon"));
+        owlButton.addActionListener(e -> showReport("Owl"));
+
+        buttonPanel.add(phoenixButton);
+        buttonPanel.add(dragonButton);
+        buttonPanel.add(owlButton);
+
+        reportArea = new JTextArea();
+        reportArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(reportArea);
+
+        reportFrame.add(buttonPanel, BorderLayout.NORTH);
+        reportFrame.add(scrollPane, BorderLayout.CENTER);
+        reportFrame.setVisible(true);
     }
 
-    public void addRejectedPet(String petType) {
-        rejectedPets.add(petType);
-    }
+    private void showReport(String petType) {
+        StringBuilder report = new StringBuilder("📊 " + petType + " Report:\n");
 
-    private void showReport() {
-        int phoenixCount = (int) acceptedPets.stream().filter(p -> p.equals("Phoenix")).count();
-        int dragonCount = (int) acceptedPets.stream().filter(p -> p.equals("Dragon")).count();
-        int owlCount = (int) acceptedPets.stream().filter(p -> p.equals("Owl")).count();
+        int accepted = 0, rejected = 0;
 
-        String report = "📊 Pet Report:\n" +
-                "Phoenix: " + phoenixCount + "\n" +
-                "Dragon: " + dragonCount + "\n" +
-                "Owl: " + owlCount + "\n" +
-                "\nAccepted: " + acceptedPets.size() +
-                "\nRejected: " + rejectedPets.size();
+        for (String[] pet : petRecords) {
+            if (pet[1].equals(petType)) {
+                report.append("ID: ").append(pet[0]).append("\n")
+                        .append("Last Health Check: ").append(pet[2]).append("\n")
+                        .append("Vaccines Received: ").append(pet[3]).append("\n");
 
-        reportArea.setText(report);
+                if (petType.equals("Phoenix")) {
+                    report.append("Fireproof Certificate: ").append(pet[4].equals("true") ? "Yes" : "No").append("\n");
+                    if (pet[4].equals("true")) accepted++; else rejected++;
+                } else if (petType.equals("Dragon")) {
+                    report.append("Pollution Level: ").append(pet[4]).append("%\n");
+                    if (Integer.parseInt(pet[4]) <= 70) accepted++; else rejected++;
+                } else if (petType.equals("Owl")) {
+                    report.append("Flight Range: ").append(pet[4]).append(" km\n");
+                    if (Integer.parseInt(pet[4]) >= 100) accepted++; else rejected++;
+                }
+                report.append("\n");
+            }
+        }
+
+        report.append("Accepted: ").append(accepted).append("\nRejected: ").append(rejected);
+        reportArea.setText(report.toString());
     }
 }

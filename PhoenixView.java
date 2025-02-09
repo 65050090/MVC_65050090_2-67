@@ -1,11 +1,14 @@
 import javax.swing.*;
+import java.util.List;
 
 public class PhoenixView extends JFrame {
     private JCheckBox fireProofCheckBox;
     private View parentView;
+    private List<String[]> petRecords;
 
-    public PhoenixView(View parentView) {
+    public PhoenixView(View parentView, List<String[]> petRecords) {
         this.parentView = parentView;
+        this.petRecords = petRecords;
 
         setTitle("Phoenix Verification");
         setSize(300, 150);
@@ -26,12 +29,16 @@ public class PhoenixView extends JFrame {
     }
 
     private void checkPhoenix() {
-        if (fireProofCheckBox.isSelected()) {
-            JOptionPane.showMessageDialog(this, "Phoenix has been accepted into the school!");
-            parentView.addAcceptedPet("Phoenix");
+        boolean fireProof = fireProofCheckBox.isSelected();
+        String[] lastPet = petRecords.get(petRecords.size() - 1);
+        
+        // เพิ่มข้อมูลใบรับรองลงไปในระบบ
+        lastPet[4] = fireProof ? "true" : "false";
+
+        if (fireProof) {
+            JOptionPane.showMessageDialog(this, " Phoenix has been accepted into the school!");
         } else {
-            JOptionPane.showMessageDialog(this, "Phoenix was rejected (Fireproof certificate is required).");
-            parentView.addRejectedPet("Phoenix");
+            JOptionPane.showMessageDialog(this, " Phoenix was rejected (Fireproof certificate is required).");
         }
         dispose();
     }
