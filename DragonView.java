@@ -32,14 +32,15 @@ public class DragonView extends JFrame {
         try {
             int pollution = Integer.parseInt(pollutionField.getText());
             String[] lastPet = petRecords.get(petRecords.size() - 1);
-            
-            // เพิ่มข้อมูลระดับมลพิษลงไปในระบบ
-            lastPet[4] = String.valueOf(pollution);
+
+            // 🔹 แทนที่ค่าเก่าด้วยค่าใหม่
+            String[] updatedPet = { lastPet[0], lastPet[1], lastPet[2], lastPet[3], String.valueOf(pollution) };
+            petRecords.set(petRecords.size() - 1, updatedPet); // อัปเดตรายการที่ถูกตรวจสอบแล้ว
 
             if (pollution <= 70) {
-                JOptionPane.showMessageDialog(this, " Dragon has been accepted into the school!");
+                JOptionPane.showMessageDialog(this, "Dragon has been accepted into the school!");
             } else {
-                JOptionPane.showMessageDialog(this, " Dragon was rejected (Pollution level exceeds 70%).");
+                JOptionPane.showMessageDialog(this, "Dragon was rejected (Pollution level exceeds 70%).");
             }
             dispose();
         } catch (NumberFormatException e) {

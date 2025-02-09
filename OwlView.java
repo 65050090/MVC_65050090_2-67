@@ -33,8 +33,9 @@ public class OwlView extends JFrame {
             int flightRange = Integer.parseInt(flightRangeField.getText());
             String[] lastPet = petRecords.get(petRecords.size() - 1);
 
-            // เพิ่มข้อมูลระยะบินลงไปในระบบ
-            lastPet[4] = String.valueOf(flightRange);
+            // 🔹 แทนที่ค่าเก่าด้วยค่าใหม่
+            String[] updatedPet = { lastPet[0], lastPet[1], lastPet[2], lastPet[3], String.valueOf(flightRange) };
+            petRecords.set(petRecords.size() - 1, updatedPet); // อัปเดตรายการที่ถูกตรวจสอบแล้ว
 
             if (flightRange >= 100) {
                 JOptionPane.showMessageDialog(this, " Owl has been accepted into the school!");

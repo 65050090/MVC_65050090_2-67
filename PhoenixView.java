@@ -31,9 +31,10 @@ public class PhoenixView extends JFrame {
     private void checkPhoenix() {
         boolean fireProof = fireProofCheckBox.isSelected();
         String[] lastPet = petRecords.get(petRecords.size() - 1);
-        
-        // เพิ่มข้อมูลใบรับรองลงไปในระบบ
-        lastPet[4] = fireProof ? "true" : "false";
+
+        // 🔹 แทนที่ค่าเก่าด้วยค่าใหม่
+        String[] updatedPet = { lastPet[0], lastPet[1], lastPet[2], lastPet[3], fireProof ? "true" : "false" };
+        petRecords.set(petRecords.size() - 1, updatedPet); // อัปเดตรายการที่ถูกตรวจสอบแล้ว
 
         if (fireProof) {
             JOptionPane.showMessageDialog(this, " Phoenix has been accepted into the school!");

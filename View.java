@@ -46,9 +46,8 @@ public class View extends JFrame {
         String[] petData = database.findPetByID(id);
 
         if (petData != null) {
-            JOptionPane.showMessageDialog(this, "Pet Information:\n" +
-                    "ID: " + petData[0] + "\nType: " + petData[1] + "\nLast Health Check Date: " + petData[2] +
-                    "\nVaccines Received: " + petData[3]);
+            JOptionPane.showMessageDialog(this, "Pet Information:\n" + "ID: " + petData[0] + "\nType: " + petData[1]
+                    + "\nLast Health Check Date: " + petData[2] + "\nVaccines Received: " + petData[3]);
 
             petRecords.add(petData); // เพิ่มข้อมูลสัตว์ที่ถูกตรวจสอบ
 
@@ -64,7 +63,8 @@ public class View extends JFrame {
                     break;
             }
         } else {
-            JOptionPane.showMessageDialog(this, " This pet does not exist. Please enter a new ID.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, " This pet does not exist. Please enter a new ID.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -111,13 +111,22 @@ public class View extends JFrame {
 
                 if (petType.equals("Phoenix")) {
                     report.append("Fireproof Certificate: ").append(pet[4].equals("true") ? "Yes" : "No").append("\n");
-                    if (pet[4].equals("true")) accepted++; else rejected++;
+                    if (pet[4].equals("true"))
+                        accepted++;
+                    else
+                        rejected++;
                 } else if (petType.equals("Dragon")) {
                     report.append("Pollution Level: ").append(pet[4]).append("%\n");
-                    if (Integer.parseInt(pet[4]) <= 70) accepted++; else rejected++;
+                    if (Integer.parseInt(pet[4]) <= 70)
+                        accepted++;
+                    else
+                        rejected++;
                 } else if (petType.equals("Owl")) {
                     report.append("Flight Range: ").append(pet[4]).append(" km\n");
-                    if (Integer.parseInt(pet[4]) >= 100) accepted++; else rejected++;
+                    if (Integer.parseInt(pet[4]) >= 100)
+                        accepted++;
+                    else
+                        rejected++;
                 }
                 report.append("\n");
             }
