@@ -1,4 +1,8 @@
+package src.view;
 import javax.swing.*;
+
+import src.model.Database;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;

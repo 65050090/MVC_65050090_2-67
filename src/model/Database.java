@@ -1,8 +1,9 @@
+package src.model;
 import java.io.*;
 import java.util.*;
 
 public class Database {
-    private static final String FILE_NAME = "pets.csv";
+    private static final String FILE_NAME = "data/pets.csv"; //  เปลี่ยนเป็น data/pets.csv
 
     public Database() {
         File file = new File(FILE_NAME);
@@ -28,5 +29,19 @@ public class Database {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<String[]> loadPets() {  
+        List<String[]> pets = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            reader.readLine(); // Skip header
+            while ((line = reader.readLine()) != null) {
+                pets.add(line.split(","));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return pets;
     }
 }

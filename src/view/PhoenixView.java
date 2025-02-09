@@ -1,13 +1,16 @@
+package src.view;
+
 import javax.swing.*;
+
 import java.util.List;
 
 public class PhoenixView extends JFrame {
     private JCheckBox fireProofCheckBox;
-    private View parentView;
+    // private View parentView;
     private List<String[]> petRecords;
 
     public PhoenixView(View parentView, List<String[]> petRecords) {
-        this.parentView = parentView;
+        // this.parentView = parentView;
         this.petRecords = petRecords;
 
         setTitle("Phoenix Verification");

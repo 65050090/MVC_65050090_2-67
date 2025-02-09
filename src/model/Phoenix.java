@@ -1,3 +1,4 @@
+package src.model;
 public class Phoenix extends Pet {
     private boolean fireProofCertificate;
 
@@ -5,4 +6,9 @@ public class Phoenix extends Pet {
         super(id, lastHealthCheckDate, vaccineCount);
         this.fireProofCertificate = fireProofCertificate;
     }
+
+    public boolean hasFireProofCertificate() {  //  เพิ่ม getter เพื่อให้สามารถใช้งานตัวแปรนี้ได้
+        return fireProofCertificate;
+    }
 }
+

@@ -1,13 +1,14 @@
+package src.view;
 import javax.swing.*;
 import java.util.List;
 
 public class DragonView extends JFrame {
     private JTextField pollutionField;
-    private View parentView;
+    // private View parentView;
     private List<String[]> petRecords;
 
     public DragonView(View parentView, List<String[]> petRecords) {
-        this.parentView = parentView;
+        // this.parentView = parentView;
         this.petRecords = petRecords;
         setTitle("Dragon Verification");
         setSize(300, 150);
@@ -33,7 +34,7 @@ public class DragonView extends JFrame {
             int pollution = Integer.parseInt(pollutionField.getText());
             String[] lastPet = petRecords.get(petRecords.size() - 1);
 
-            // 🔹 แทนที่ค่าเก่าด้วยค่าใหม่
+            //  แทนที่ค่าเก่าด้วยค่าใหม่
             String[] updatedPet = { lastPet[0], lastPet[1], lastPet[2], lastPet[3], String.valueOf(pollution) };
             petRecords.set(petRecords.size() - 1, updatedPet); // อัปเดตรายการที่ถูกตรวจสอบแล้ว
 

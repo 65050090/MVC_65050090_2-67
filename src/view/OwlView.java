@@ -1,13 +1,14 @@
+package src.view;
 import javax.swing.*;
 import java.util.List;
 
 public class OwlView extends JFrame {
     private JTextField flightRangeField;
-    private View parentView;
+    // private View parentView;
     private List<String[]> petRecords;
 
     public OwlView(View parentView, List<String[]> petRecords) {
-        this.parentView = parentView;
+        // this.parentView = parentView;
         this.petRecords = petRecords;
         setTitle("Owl Verification");
         setSize(300, 150);

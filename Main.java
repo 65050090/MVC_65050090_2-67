@@ -1,5 +1,8 @@
 import javax.swing.*;
 
+import src.model.Database;
+import src.view.View;
+
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
