@@ -1,29 +1,47 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class View extends JFrame {
     private Database database;
     private JTextField idField;
+    private JTextArea reportArea;
+    private List<String> acceptedPets;
+    private List<String> rejectedPets;
 
     public View(Database database) {
         this.database = database;
+        this.acceptedPets = new ArrayList<>();
+        this.rejectedPets = new ArrayList<>();
 
-        setTitle("Enter your pet's ID");
-        setSize(300, 150);
+        setTitle("Pet Verification System");
+        setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        JPanel panel = new JPanel(new GridLayout(2, 1));
+        JPanel inputPanel = new JPanel(new GridLayout(2, 1));
         idField = new JTextField();
-        panel.add(new JLabel("Enter ID:"));
-        panel.add(idField);
+        inputPanel.add(new JLabel("Enter Pet ID:"));
+        inputPanel.add(idField);
 
-        JButton submitButton = new JButton("confirm");
+        JButton submitButton = new JButton("Confirm");
         submitButton.addActionListener(e -> checkID());
 
-        add(panel, BorderLayout.CENTER);
-        add(submitButton, BorderLayout.SOUTH);
+        JButton reportButton = new JButton("View Report");
+        reportButton.addActionListener(e -> showReport());
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(submitButton);
+        buttonPanel.add(reportButton);
+
+        reportArea = new JTextArea();
+        reportArea.setEditable(false);
+
+        add(inputPanel, BorderLayout.NORTH);
+        add(buttonPanel, BorderLayout.CENTER);
+        add(new JScrollPane(reportArea), BorderLayout.SOUTH);
 
         setVisible(true);
     }
@@ -33,22 +51,49 @@ public class View extends JFrame {
         String[] petData = database.findPetByID(id);
 
         if (petData != null) {
-            JOptionPane.showMessageDialog(this, "Animal information:\n" +"ID: " + petData[0] + "\nType: " + petData[1] + "\nLast health check date: " + petData[2] + "\nVaccines received: " + petData[3]);
+            String petType = petData[1];
+            String message = "Pet Information:\n" +
+                    "ID: " + petData[0] + "\nType: " + petType + "\nLast Health Check Date: " + petData[2] +
+                    "\nVaccines Received: " + petData[3];
 
-            dispose();
-            switch (petData[1]) {
+            JOptionPane.showMessageDialog(this, message);
+
+            switch (petType) {
                 case "Phoenix":
-                    new PhoenixView();
+                    new PhoenixView(this);
                     break;
                 case "Dragon":
-                    new DragonView();
+                    new DragonView(this);
                     break;
                 case "Owl":
-                    new OwlView();
+                    new OwlView(this);
                     break;
             }
         } else {
-            JOptionPane.showMessageDialog(this, "This animal does not exist. Please enter a new ID.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "This pet does not exist. Please enter a new ID.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public void addAcceptedPet(String petType) {
+        acceptedPets.add(petType);
+    }
+
+    public void addRejectedPet(String petType) {
+        rejectedPets.add(petType);
+    }
+
+    private void showReport() {
+        int phoenixCount = (int) acceptedPets.stream().filter(p -> p.equals("Phoenix")).count();
+        int dragonCount = (int) acceptedPets.stream().filter(p -> p.equals("Dragon")).count();
+        int owlCount = (int) acceptedPets.stream().filter(p -> p.equals("Owl")).count();
+
+        String report = "📊 Pet Report:\n" +
+                "Phoenix: " + phoenixCount + "\n" +
+                "Dragon: " + dragonCount + "\n" +
+                "Owl: " + owlCount + "\n" +
+                "\nAccepted: " + acceptedPets.size() +
+                "\nRejected: " + rejectedPets.size();
+
+        reportArea.setText(report);
     }
 }

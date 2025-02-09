@@ -2,8 +2,10 @@ import javax.swing.*;
 
 public class OwlView extends JFrame {
     private JTextField flightRangeField;
+    private View parentView;
 
-    public OwlView() {
+    public OwlView(View parentView) {
+        this.parentView = parentView;
         setTitle("Owl Verification");
         setSize(300, 150);
         setLocationRelativeTo(null);
@@ -11,9 +13,9 @@ public class OwlView extends JFrame {
 
         JPanel panel = new JPanel();
         flightRangeField = new JTextField(5);
-        JButton submitButton = new JButton("confirm");
+        JButton submitButton = new JButton("Confirm");
 
-        panel.add(new JLabel("Flight distance (km):"));
+        panel.add(new JLabel("Flight Range (km):"));
         panel.add(flightRangeField);
         panel.add(submitButton);
         add(panel);
@@ -27,13 +29,15 @@ public class OwlView extends JFrame {
         try {
             int flightRange = Integer.parseInt(flightRangeField.getText());
             if (flightRange >= 100) {
-                JOptionPane.showMessageDialog(this, "Owl Dragon has been accepted into the school!");
+                parentView.addAcceptedPet("Owl");
+                JOptionPane.showMessageDialog(this, "✅ Owl has been accepted into the school!");
             } else {
-                JOptionPane.showMessageDialog(this, " Owl  rejected (Must be able to fly at least 100 km.)");
+                parentView.addRejectedPet("Owl");
+                JOptionPane.showMessageDialog(this, "❌ Owl was rejected (Must fly at least 100 km).");
             }
             dispose();
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Please enter a valid value.");
+            JOptionPane.showMessageDialog(this, "Please enter a valid number.");
         }
     }
 }
