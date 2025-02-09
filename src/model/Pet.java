@@ -1,4 +1,5 @@
 package src.model;
+
 public abstract class Pet {
     protected String id;
     protected String lastHealthCheckDate;

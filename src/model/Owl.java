@@ -1,4 +1,5 @@
 package src.model;
+
 public class Owl extends Pet {
     private int flightRange;
 
@@ -7,7 +8,7 @@ public class Owl extends Pet {
         this.flightRange = flightRange;
     }
 
-    public int getFlightRange() {  //  เพิ่ม getter เพื่อให้สามารถใช้งานตัวแปรนี้ได้
+    public int getFlightRange() {
         return flightRange;
     }
 }

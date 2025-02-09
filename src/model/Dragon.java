@@ -1,4 +1,5 @@
 package src.model;
+
 public class Dragon extends Pet {
     private int pollutionLevel;
 
@@ -7,8 +8,7 @@ public class Dragon extends Pet {
         this.pollutionLevel = pollutionLevel;
     }
 
-    public int getPollutionLevel() {  //  เพิ่ม getter เพื่อให้สามารถใช้งานตัวแปรนี้ได้
+    public int getPollutionLevel() {
         return pollutionLevel;
     }
 }
-

@@ -1,15 +1,14 @@
 package src.view;
 import javax.swing.*;
-import java.util.List;
+import src.controller.Controller;
 
 public class OwlView extends JFrame {
     private JTextField flightRangeField;
-    // private View parentView;
-    private List<String[]> petRecords;
+    private Controller controller; // เปลี่ยนจากการรับ parentView และ petRecords มาเป็น Controller
 
-    public OwlView(View parentView, List<String[]> petRecords) {
-        // this.parentView = parentView;
-        this.petRecords = petRecords;
+    // Constructor ที่รับ Controller แทน
+    public OwlView(Controller controller) { 
+        this.controller = controller;
         setTitle("Owl Verification");
         setSize(300, 150);
         setLocationRelativeTo(null);
@@ -32,16 +31,22 @@ public class OwlView extends JFrame {
     private void checkOwl() {
         try {
             int flightRange = Integer.parseInt(flightRangeField.getText());
-            String[] lastPet = petRecords.get(petRecords.size() - 1);
+            // ดึงข้อมูลรายการสัตว์ล่าสุดจาก Controller
+            String[] lastPet = controller.getLastPetRecord();
 
-            // 🔹 แทนที่ค่าเก่าด้วยค่าใหม่
-            String[] updatedPet = { lastPet[0], lastPet[1], lastPet[2], lastPet[3], String.valueOf(flightRange) };
-            petRecords.set(petRecords.size() - 1, updatedPet); // อัปเดตรายการที่ถูกตรวจสอบแล้ว
+            String[] updatedPet;
+            if (lastPet.length >= 5) {
+                updatedPet = lastPet.clone();
+                updatedPet[4] = String.valueOf(flightRange);
+            } else {
+                updatedPet = new String[] { lastPet[0], lastPet[1], lastPet[2], lastPet[3], String.valueOf(flightRange) };
+            }
+            controller.updateLastPetRecord(updatedPet);
 
             if (flightRange >= 100) {
-                JOptionPane.showMessageDialog(this, " Owl has been accepted into the school!");
+                JOptionPane.showMessageDialog(this, "Owl has been accepted into the school!");
             } else {
-                JOptionPane.showMessageDialog(this, " Owl was rejected (Must fly at least 100 km).");
+                JOptionPane.showMessageDialog(this, "Owl was rejected (Must fly at least 100 km).");
             }
             dispose();
         } catch (NumberFormatException e) {

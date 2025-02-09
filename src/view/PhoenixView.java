@@ -1,18 +1,15 @@
 package src.view;
 
 import javax.swing.*;
-
-import java.util.List;
+import src.controller.Controller;
 
 public class PhoenixView extends JFrame {
     private JCheckBox fireProofCheckBox;
-    // private View parentView;
-    private List<String[]> petRecords;
+    private Controller controller; // เปลี่ยนจากการรับ parentView และ petRecords มาเป็น Controller
 
-    public PhoenixView(View parentView, List<String[]> petRecords) {
-        // this.parentView = parentView;
-        this.petRecords = petRecords;
-
+    // Constructor ที่รับ Controller แทน
+    public PhoenixView(Controller controller) {
+        this.controller = controller;
         setTitle("Phoenix Verification");
         setSize(300, 150);
         setLocationRelativeTo(null);
@@ -33,16 +30,22 @@ public class PhoenixView extends JFrame {
 
     private void checkPhoenix() {
         boolean fireProof = fireProofCheckBox.isSelected();
-        String[] lastPet = petRecords.get(petRecords.size() - 1);
+        // ดึงข้อมูลรายการสัตว์ล่าสุดจาก Controller
+        String[] lastPet = controller.getLastPetRecord();
 
-        // 🔹 แทนที่ค่าเก่าด้วยค่าใหม่
-        String[] updatedPet = { lastPet[0], lastPet[1], lastPet[2], lastPet[3], fireProof ? "true" : "false" };
-        petRecords.set(petRecords.size() - 1, updatedPet); // อัปเดตรายการที่ถูกตรวจสอบแล้ว
+        String[] updatedPet;
+        if (lastPet.length >= 5) {
+            updatedPet = lastPet.clone();
+            updatedPet[4] = fireProof ? "true" : "false";
+        } else {
+            updatedPet = new String[] { lastPet[0], lastPet[1], lastPet[2], lastPet[3], fireProof ? "true" : "false" };
+        }
+        controller.updateLastPetRecord(updatedPet);
 
         if (fireProof) {
-            JOptionPane.showMessageDialog(this, " Phoenix has been accepted into the school!");
+            JOptionPane.showMessageDialog(this, "Phoenix has been accepted into the school!");
         } else {
-            JOptionPane.showMessageDialog(this, " Phoenix was rejected (Fireproof certificate is required).");
+            JOptionPane.showMessageDialog(this, "Phoenix was rejected (Fireproof certificate is required).");
         }
         dispose();
     }

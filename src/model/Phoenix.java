@@ -1,4 +1,5 @@
 package src.model;
+
 public class Phoenix extends Pet {
     private boolean fireProofCertificate;
 
@@ -7,8 +8,7 @@ public class Phoenix extends Pet {
         this.fireProofCertificate = fireProofCertificate;
     }
 
-    public boolean hasFireProofCertificate() {  //  เพิ่ม getter เพื่อให้สามารถใช้งานตัวแปรนี้ได้
+    public boolean hasFireProofCertificate() {
         return fireProofCertificate;
     }
 }
-

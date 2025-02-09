@@ -1,13 +1,16 @@
 import javax.swing.*;
-
-import src.model.Database;
+import src.model.Model;
+import src.controller.Controller;
 import src.view.View;
 
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Database db = new Database();
-            new View(db); // ตรวจสอบว่ามี IView.java และ import ถูกต้อง
+            // สร้าง Model แล้วสร้าง Controller จาก Model
+            Model model = new Model();
+            Controller controller = new Controller(model);
+            // ส่ง Controller ไปยัง View
+            new View(controller);
         });
     }
 }
